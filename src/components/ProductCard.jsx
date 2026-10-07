@@ -29,7 +29,7 @@ export function ProductCard({ product }) {
         {product.description}
       </p>
       <p style={{ fontWeight: 'bold', color: theme.price, margin: '0.5rem 0 0' }}>
-        $ {product.price}
+        S/ {product.price.toFixed(2)}
       </p>
     </div>
   );

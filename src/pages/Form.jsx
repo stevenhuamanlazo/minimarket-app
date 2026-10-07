@@ -79,7 +79,7 @@ export function Form() {
         </div>
 
         <div>
-          <label style={{ display: 'block', marginBottom: '0.3rem' }}>Precio ($) *</label>
+          <label style={{ display: 'block', marginBottom: '0.3rem' }}>Precio (S/) *</label>
           <input
             type="number"
             step="0.01"

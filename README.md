@@ -15,6 +15,8 @@ Catálogo de un minimarket que consume productos de abarrotes desde una API púb
 
 `https://dummyjson.com/products/category/groceries`
 
+Los datos de la API (en inglés y en dólares) se adaptan en `src/utils/productos.js`: títulos y descripciones en español y precios convertidos a soles (S/) con un tipo de cambio fijo.
+
 ## Ejecutar el proyecto
 
 ```bash

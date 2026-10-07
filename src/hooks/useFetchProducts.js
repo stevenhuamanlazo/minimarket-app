@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import api from '../services/api';
+import { adaptarProducto } from '../utils/productos';
 
 export const useFetchProducts = () => {
   const [products, setProducts] = useState([]);
@@ -24,7 +25,9 @@ export const useFetchProducts = () => {
           signal: controller.signal,
         });
 
-        setProducts(response.data.products);
+        // Se adaptan al contexto local: textos en español y precios en soles.
+        // Así el buscador también filtra por el nombre en español.
+        setProducts(response.data.products.map(adaptarProducto));
       } catch (err) {
         if (axios.isCancel(err)) {
           console.log('Petición abortada correctamente por el controlador');
