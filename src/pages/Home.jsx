@@ -1,20 +1,27 @@
 import { Link } from 'react-router-dom';
+import { theme, APP_NAME } from '../theme';
 
 export function Home() {
   return (
     <div style={{ padding: '3rem 1rem', textAlign: 'center' }}>
-      <h1>Bienvenido a Cafetería Central ☕</h1>
-      <p>Explora nuestro catálogo con los mejores cafés de especialidad y postres.</p>
-      <Link to="/productos" style={{
-        display: 'inline-block',
-        marginTop: '1rem',
-        padding: '0.6rem 1.2rem',
-        backgroundColor: '#4e342e',
-        color: '#fff',
-        borderRadius: '4px',
-        textDecoration: 'none'
-      }}>
-        Ver Catálogo Completo
+      <h1>Bienvenido a {APP_NAME} 🛒</h1>
+      <p style={{ color: theme.muted }}>
+        Frutas, verduras, carnes, lácteos y todo para tu despensa en un solo lugar.
+      </p>
+      <Link
+        to="/productos"
+        style={{
+          display: 'inline-block',
+          marginTop: '1.5rem',
+          padding: '0.7rem 1.4rem',
+          backgroundColor: theme.button,
+          color: '#fff',
+          borderRadius: '6px',
+          textDecoration: 'none',
+          fontWeight: 'bold',
+        }}
+      >
+        Ver Productos
       </Link>
     </div>
   );

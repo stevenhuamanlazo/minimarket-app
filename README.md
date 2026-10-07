@@ -1,16 +1,43 @@
-# React + Vite
+# Minimarket Fresco 🛒
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+SPA (Single Page Application) hecha con React para la **Práctica Semana 06** del curso Desarrollo de Aplicaciones Web (IS093A) – UNCP.
 
-Currently, two official plugins are available:
+Catálogo de un minimarket que consume productos de abarrotes desde una API pública, con enrutamiento del lado del cliente, formulario controlado y manejo de estados de carga y error.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Tecnologías
 
-## React Compiler
+- React + Vite
+- React Router (`BrowserRouter`, `NavLink`)
+- Axios con `async/await` y `AbortController`
+- Estilos inline con un tema centralizado (`src/theme.js`)
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## API
 
-## Expanding the ESLint configuration
+`https://dummyjson.com/products/category/groceries`
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Ejecutar el proyecto
+
+```bash
+npm install
+npm run dev
+```
+
+## Estructura
+
+```
+src/
+├── components/   Navbar, ProductCard
+├── hooks/        useFetchProducts (axios + async/await + AbortController)
+├── pages/        Home, List, Form, NotFound
+├── services/     api.js (instancia de axios)
+└── theme.js      paleta de colores y nombre de la app
+```
+
+## Páginas
+
+| Ruta | Descripción |
+|---|---|
+| `/` | Inicio |
+| `/productos` | Catálogo con buscador y estados de carga/error |
+| `/nuevo-producto` | Formulario controlado con validación en tiempo real |
+| `*` | Página 404 |

@@ -7,6 +7,9 @@ export const useFetchProducts = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  // StrictMode (solo en desarrollo) monta, desmonta y vuelve a montar el componente:
+  // por eso verás 2 peticiones en la pestaña Network y la primera aparece como
+  // "cancelled" gracias al AbortController. En producción solo hay una petición.
   useEffect(() => {
     // Instancia de AbortController para cancelar peticiones al desmontar el componente
     const controller = new AbortController();
@@ -15,8 +18,8 @@ export const useFetchProducts = () => {
       try {
         setLoading(true);
         setError(null);
-        
-        // Consumo de API filtrando productos de cafetería/abarrotes
+
+        // Consumo de API: categoría "groceries" (productos de minimarket)
         const response = await api.get('/products/category/groceries', {
           signal: controller.signal,
         });
@@ -26,10 +29,14 @@ export const useFetchProducts = () => {
         if (axios.isCancel(err)) {
           console.log('Petición abortada correctamente por el controlador');
         } else {
-          setError(err.message || 'Error al obtener el catálogo de la cafetería');
+          setError(err.message || 'Error al obtener el catálogo del minimarket');
         }
       } finally {
-        setLoading(false);
+        // Si la petición fue abortada, el nuevo efecto sigue cargando:
+        // no se apaga loading para evitar un parpadeo de "sin productos".
+        if (!controller.signal.aborted) {
+          setLoading(false);
+        }
       }
     };
 
