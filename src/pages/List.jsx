@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useFetchProducts } from '../hooks/useFetchProducts';
 import { ProductCard } from '../components/ProductCard';
+import { PageContainer } from '../components/PageContainer';
 import { theme } from '../theme';
 
 export function List() {
@@ -17,10 +18,9 @@ export function List() {
     product.title.toLowerCase().includes(busqueda.toLowerCase())
   );
 
+  // IA: PageContainer existía pero no se usaba, así que no había composición con children → Solución manual: envolver todo el contenido de la página con <PageContainer>
   return (
-    <div style={{ padding: '1.5rem' }}>
-      <h2>Catálogo de Productos del Minimarket</h2>
-
+    <PageContainer title="Catálogo de Productos del Minimarket">
       {/* Buscador controlado: onChange actualiza el estado */}
       <input
         type="text"
@@ -56,6 +56,6 @@ export function List() {
           )}
         </div>
       )}
-    </div>
+    </PageContainer>
   );
 }

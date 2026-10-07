@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { PageContainer } from '../components/PageContainer';
 import { theme } from '../theme';
 
 // Validación de un campo: devuelve el mensaje de error o '' si es válido
@@ -47,6 +48,7 @@ export function Form() {
     setErrors({});
   };
 
+  const labelStyle = { display: 'block', marginBottom: '0.3rem' };
   const inputStyle = {
     width: '100%',
     padding: '0.5rem',
@@ -57,69 +59,72 @@ export function Form() {
   const errorStyle = { color: theme.error, fontSize: '0.85rem' };
 
   return (
-    <div style={{ padding: '2rem', maxWidth: '420px', margin: '0 auto' }}>
-      <h2>Registrar Nuevo Producto</h2>
-
-      <form
-        onSubmit={handleSubmit}
-        noValidate
-        style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}
-      >
-        <div>
-          <label style={{ display: 'block', marginBottom: '0.3rem' }}>Nombre del Producto *</label>
-          <input
-            type="text"
-            name="title"
-            value={formData.title}
-            onChange={handleChange}
-            style={inputStyle}
-            placeholder="Ej. Palta Hass 1kg"
-          />
-          {errors.title && <small style={errorStyle}>{errors.title}</small>}
-        </div>
-
-        <div>
-          <label style={{ display: 'block', marginBottom: '0.3rem' }}>Precio (S/) *</label>
-          <input
-            type="number"
-            step="0.01"
-            name="price"
-            value={formData.price}
-            onChange={handleChange}
-            style={inputStyle}
-            placeholder="Ej. 3.50"
-          />
-          {errors.price && <small style={errorStyle}>{errors.price}</small>}
-        </div>
-
-        <div>
-          <label style={{ display: 'block', marginBottom: '0.3rem' }}>Descripción</label>
-          <textarea
-            name="description"
-            value={formData.description}
-            onChange={handleChange}
-            style={inputStyle}
-            placeholder="Ej. Fruta fresca de temporada."
-          />
-        </div>
-
-        <button
-          type="submit"
-          style={{
-            padding: '0.7rem',
-            backgroundColor: theme.button,
-            color: '#fff',
-            border: 'none',
-            borderRadius: '4px',
-            cursor: 'pointer',
-            fontWeight: 'bold',
-          }}
+    <PageContainer title="Registrar Nuevo Producto">
+      <div style={{ maxWidth: '420px' }}>
+        <form
+          onSubmit={handleSubmit}
+          noValidate
+          style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}
         >
-          Guardar Producto
-        </button>
+          <div>
+            <label htmlFor="title" style={labelStyle}>Nombre del Producto *</label>
+            <input
+              id="title"
+              type="text"
+              name="title"
+              value={formData.title}
+              onChange={handleChange}
+              style={inputStyle}
+              placeholder="Ej. Palta Hass 1kg"
+            />
+            {errors.title && <small style={errorStyle}>{errors.title}</small>}
+          </div>
 
-        {success && <p style={{ color: theme.button, fontWeight: 'bold' }}>{success}</p>}
-      </form>
-    </div>
+          <div>
+            <label htmlFor="price" style={labelStyle}>Precio (S/) *</label>
+            <input
+              id="price"
+              type="number"
+              step="0.01"
+              name="price"
+              value={formData.price}
+              onChange={handleChange}
+              style={inputStyle}
+              placeholder="Ej. 3.50"
+            />
+            {errors.price && <small style={errorStyle}>{errors.price}</small>}
+          </div>
+
+          <div>
+            <label htmlFor="description" style={labelStyle}>Descripción</label>
+            <textarea
+              id="description"
+              name="description"
+              value={formData.description}
+              onChange={handleChange}
+              style={inputStyle}
+              placeholder="Ej. Fruta fresca de temporada."
+            />
+          </div>
+
+          <button
+            type="submit"
+            style={{
+              padding: '0.7rem',
+              backgroundColor: theme.button,
+              color: '#fff',
+              border: 'none',
+              borderRadius: '4px',
+              cursor: 'pointer',
+              fontWeight: 'bold',
+            }}
+          >
+            Guardar Producto
+          </button>
+
+          {success && <p style={{ color: theme.button, fontWeight: 'bold' }}>{success}</p>}
+        </form>
+      </div>
+    </PageContainer>
   );
 }
