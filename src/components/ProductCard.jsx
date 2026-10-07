@@ -43,7 +43,26 @@ export function ProductCard({ product }) {
           🛒
         </div>
       )}
-      <h3 style={{ fontSize: '1.05rem', margin: '0.5rem 0' }}>{product.title}</h3>
+
+      {/* Etiqueta de categoría */}
+      {product.category && (
+        <span
+          style={{
+            alignSelf: 'flex-start',
+            marginTop: '0.6rem',
+            padding: '0.15rem 0.6rem',
+            borderRadius: '999px',
+            backgroundColor: '#E8F5E9',
+            color: theme.primary,
+            fontSize: '0.72rem',
+            fontWeight: 600,
+          }}
+        >
+          {product.category}
+        </span>
+      )}
+
+      <h3 style={{ fontSize: '1.05rem', margin: '0.4rem 0' }}>{product.title}</h3>
       {/* IA: la descripción en español se cortaba por la altura fija → Solución manual: quitar height/overflow y usar flexGrow dentro de una tarjeta en columna */}
       <p style={{ color: theme.muted, fontSize: '0.85rem', flexGrow: 1 }}>
         {product.description}

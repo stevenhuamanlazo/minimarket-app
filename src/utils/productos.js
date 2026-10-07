@@ -35,19 +35,40 @@ const traducciones = {
   41: { title: 'Caja de pañuelos', description: 'Caja de pañuelos suaves y resistentes para el hogar y la oficina.' },
   42: { title: 'Agua', description: 'Agua purificada sin gas, ideal para mantenerte hidratado todo el día.' },
 };
+// Categorías del minimarket (se usan en los filtros del catálogo y en el formulario)
+export const CATEGORIAS = [
+  'Frutas y verduras',
+  'Carnes y pescados',
+  'Lácteos y huevos',
+  'Despensa',
+  'Bebidas',
+  'Hogar y mascotas',
+];
+
+// Categoría de cada producto de la API, por id (la API solo trae "groceries" para todos)
+const categoriaPorId = {
+  16: 'Frutas y verduras', 17: 'Carnes y pescados', 18: 'Hogar y mascotas', 19: 'Carnes y pescados',
+  20: 'Despensa', 21: 'Frutas y verduras', 22: 'Hogar y mascotas', 23: 'Lácteos y huevos',
+  24: 'Carnes y pescados', 25: 'Frutas y verduras', 26: 'Frutas y verduras', 27: 'Despensa',
+  28: 'Lácteos y huevos', 29: 'Bebidas', 30: 'Frutas y verduras', 31: 'Frutas y verduras',
+  32: 'Lácteos y huevos', 33: 'Frutas y verduras', 34: 'Bebidas', 35: 'Frutas y verduras',
+  36: 'Despensa', 37: 'Frutas y verduras', 38: 'Despensa', 39: 'Bebidas',
+  40: 'Frutas y verduras', 41: 'Hogar y mascotas', 42: 'Bebidas',
+};
 
 // Convierte dólares a soles redondeando a múltiplos de S/ 0.10, como se
 // acostumbra en los precios de un comercio peruano.
 export const aSoles = (usd) => Math.round(usd * TIPO_DE_CAMBIO * 10) / 10;
 
-// Devuelve el producto con título y descripción en español y precio en soles.
-// Si un id no tiene traducción, conserva los textos originales de la API.
+// Devuelve el producto con título y descripción en español, categoría y precio en soles.
+// Si un id no tiene traducción o categoría, conserva los textos de la API y usa "Despensa".
 export const adaptarProducto = (product) => {
   const t = traducciones[product.id];
   return {
     ...product,
     title: t?.title ?? product.title,
     description: t?.description ?? product.description,
+    category: categoriaPorId[product.id] ?? 'Despensa',
     price: aSoles(product.price),
   };
 };
