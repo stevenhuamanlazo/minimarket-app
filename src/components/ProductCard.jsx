@@ -11,6 +11,8 @@ export function ProductCard({ product }) {
         boxShadow: '0 2px 5px rgba(0,0,0,0.08)',
         backgroundColor: '#fff',
         textAlign: 'left',
+        display: 'flex',
+        flexDirection: 'column',
       }}
     >
       <img
@@ -25,7 +27,8 @@ export function ProductCard({ product }) {
         }}
       />
       <h3 style={{ fontSize: '1.05rem', margin: '0.5rem 0' }}>{product.title}</h3>
-      <p style={{ color: theme.muted, fontSize: '0.85rem', height: '40px', overflow: 'hidden' }}>
+      {/* IA: la descripción en español se cortaba por la altura fija → Solución manual: quitar height/overflow y usar flexGrow dentro de una tarjeta en columna */}
+      <p style={{ color: theme.muted, fontSize: '0.85rem', flexGrow: 1 }}>
         {product.description}
       </p>
       <p style={{ fontWeight: 'bold', color: theme.price, margin: '0.5rem 0 0' }}>
