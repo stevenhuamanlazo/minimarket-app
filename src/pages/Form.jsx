@@ -1,13 +1,17 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
 import { PageContainer } from '../components/PageContainer';
 import { ProductCard } from '../components/ProductCard';
-import { addLocalProduct } from '../services/localProducts';
-import { CATEGORIAS } from '../utils/productos';
 import { theme } from '../theme';
 
 const MAX_DESCRIPCION = 120;
-const MAX_IMAGEN_KB = 300;
+const CATEGORIAS = [
+  'Frutas y verduras',
+  'Carnes y pescados',
+  'Lácteos y huevos',
+  'Despensa',
+  'Bebidas',
+  'Hogar y mascotas',
+];
 
 // Validación de un campo: devuelve el mensaje de error o '' si es válido
 const validate = (name, value) => {
@@ -20,7 +24,7 @@ const validate = (name, value) => {
   return '';
 };
 
-const initialData = { title: '', price: '', category: CATEGORIAS[3], description: '' };
+const initialData = { title: '', price: '', category: 'Despensa', description: '' };
 
 // Campo reutilizable: etiqueta + control (children) + mensaje de error o ayuda
 function Field({ id, label, required, error, hint, children }) {
@@ -43,16 +47,10 @@ function Field({ id, label, required, error, hint, children }) {
   );
 }
 
-// Oculta el <input type="file"> nativo pero lo mantiene accesible por teclado
-const visuallyHidden = { position: 'absolute', width: '1px', height: '1px', opacity: 0, overflow: 'hidden' };
-
 export function Form() {
   const [formData, setFormData] = useState(initialData);
   const [errors, setErrors] = useState({});
   const [success, setSuccess] = useState('');
-  const [imagen, setImagen] = useState(null); // imagen elegida, como data URL
-  const [imagenError, setImagenError] = useState('');
-  const [fileKey, setFileKey] = useState(0); // cambia para limpiar el input de archivo
 
   // onChange: actualiza el valor (input controlado) y valida en tiempo real
   const handleChange = (e) => {
@@ -62,38 +60,7 @@ export function Form() {
     setErrors((prev) => ({ ...prev, [name]: validate(name, value) }));
   };
 
-  // Lee la imagen elegida y la convierte a data URL para mostrarla y guardarla
-  const handleImagen = (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-
-    if (!file.type.startsWith('image/')) {
-      setImagenError('Selecciona un archivo de imagen (JPG o PNG)');
-      setFileKey((k) => k + 1);
-      return;
-    }
-    if (file.size > MAX_IMAGEN_KB * 1024) {
-      setImagenError(`La imagen no debe superar los ${MAX_IMAGEN_KB} KB`);
-      setFileKey((k) => k + 1);
-      return;
-    }
-
-    const reader = new FileReader();
-    reader.onload = () => {
-      setImagen(reader.result);
-      setImagenError('');
-      setSuccess('');
-    };
-    reader.readAsDataURL(file);
-  };
-
-  const quitarImagen = () => {
-    setImagen(null);
-    setImagenError('');
-    setFileKey((k) => k + 1);
-  };
-
-  // onSubmit: valida los campos obligatorios y guarda el producto en el catálogo local
+  // onSubmit: valida todos los campos obligatorios antes de registrar
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -107,33 +74,16 @@ export function Form() {
       return;
     }
 
-    const nuevo = {
-      id: `local-${Date.now()}`, // id único y estable (no se usa el índice como key)
-      title: formData.title.trim(),
-      description: formData.description.trim() || 'Producto agregado desde el panel del minimarket.',
-      price: Number(formData.price),
-      category: formData.category,
-      thumbnail: imagen,
-    };
-
-    const guardado = addLocalProduct(nuevo);
-    console.log('Nuevo Producto Registrado:', nuevo);
-
-    setSuccess(
-      guardado
-        ? `Producto "${nuevo.title}" (${nuevo.category}) agregado al catálogo.`
-        : `Producto "${nuevo.title}" registrado, pero no se pudo guardar (almacenamiento lleno).`
-    );
+    console.log('Nuevo Producto Registrado:', formData);
+    setSuccess(`Producto "${formData.title}" (${formData.category}) agregado exitosamente al catálogo.`);
     setFormData(initialData);
     setErrors({});
-    quitarImagen();
   };
 
   const handleReset = () => {
     setFormData(initialData);
     setErrors({});
     setSuccess('');
-    quitarImagen();
   };
 
   // Borde del campo: rojo si hay error, verde si es válido, neutro si está vacío
@@ -155,12 +105,10 @@ export function Form() {
     title: formData.title.trim() || 'Nombre del producto',
     description: formData.description.trim() || 'La descripción del producto aparecerá aquí.',
     price: Number(formData.price) > 0 ? Number(formData.price) : 0,
-    category: formData.category,
-    thumbnail: imagen,
+    thumbnail: null,
   };
 
   // IA: el formulario se veía muy simple → Solución manual: tarjeta con campos agrupados (Field con children), bordes según validación y vista previa con ProductCard
-  // IA: los productos nuevos no aparecían en el catálogo → Solución manual: guardarlos en localStorage y mostrarlos junto a los de la API
   return (
     <PageContainer title="Registrar Nuevo Producto">
       <p style={{ color: theme.muted, marginBottom: '1.25rem' }}>
@@ -194,10 +142,7 @@ export function Form() {
                 fontSize: '0.9rem',
               }}
             >
-              ✅ {success}{' '}
-              <Link to="/productos" style={{ color: theme.primary, fontWeight: 700 }}>
-                Ver en el catálogo →
-              </Link>
+              ✅ {success}
             </div>
           )}
 
@@ -266,54 +211,6 @@ export function Form() {
                 </Field>
               </div>
             </div>
-
-            <Field
-              id="image"
-              label="Imagen del producto"
-              error={imagenError}
-              hint={`JPG o PNG, máximo ${MAX_IMAGEN_KB} KB (opcional)`}
-            >
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap' }}>
-                <label
-                  htmlFor="image"
-                  style={{
-                    padding: '0.55rem 1rem',
-                    border: `1.5px dashed ${theme.button}`,
-                    borderRadius: '8px',
-                    color: theme.primary,
-                    fontWeight: 600,
-                    fontSize: '0.9rem',
-                    cursor: 'pointer',
-                    backgroundColor: theme.bg,
-                  }}
-                >
-                  📷 {imagen ? 'Cambiar imagen' : 'Elegir imagen'}
-                </label>
-                <input
-                  key={fileKey}
-                  id="image"
-                  type="file"
-                  accept="image/*"
-                  onChange={handleImagen}
-                  style={visuallyHidden}
-                />
-                {imagen && (
-                  <button
-                    type="button"
-                    onClick={quitarImagen}
-                    style={{
-                      background: 'none',
-                      border: 'none',
-                      color: theme.error,
-                      fontWeight: 600,
-                      cursor: 'pointer',
-                    }}
-                  >
-                    Quitar
-                  </button>
-                )}
-              </div>
-            </Field>
 
             <Field
               id="description"
