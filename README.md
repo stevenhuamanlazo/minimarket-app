@@ -4,6 +4,12 @@ SPA (Single Page Application) hecha con React para la **Práctica Semana 06** de
 
 Catálogo de un minimarket que consume productos de abarrotes desde una API pública, con enrutamiento del lado del cliente, formulario controlado y manejo de estados de carga y error.
 
+## 🚀 Demo en línea
+
+👉 **https://stevenhuamanlazo.github.io/minimarket-app/**
+
+Se publica automáticamente en GitHub Pages con GitHub Actions cada vez que se hace push a `main` (compila con Vite y sube la carpeta `dist`).
+
 ## Tecnologías
 
 - React + Vite
